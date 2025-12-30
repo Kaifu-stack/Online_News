@@ -79,22 +79,19 @@ export const NewsProvider = ({ children }) => {
     const searchNews = async (query, page = 1) => {
         setLoading(true);
         try {
-            const response = await newsService.searchNews(query, page);
+            const res = await newsService.searchNews(query, page);
 
-            if (response.success) {
-                const data = response.data?.data || {};
-                setNews(data.news || []);
-                setTotalPages(data.totalPages || 1);
+            if (res.success) {
+                setNews(res.data.news || []);
+                setTotalPages(res.data.totalPages || 1);
             }
 
-            return response;
-        } catch (error) {
-            toast.error("Search failed");
-            return { success: false };
+            return res;
         } finally {
             setLoading(false);
         }
     };
+
 
     // ✅ Create News
     const createNews = async (newsData) => {

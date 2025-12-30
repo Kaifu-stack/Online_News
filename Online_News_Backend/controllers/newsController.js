@@ -1,5 +1,49 @@
-// controllers/newsController.js
-const News = require('../models/newsModel');
+const News = require("../models/newsModel");  // REQUIRED
+
+exports.searchNews = async (req, res) => {
+    try {
+        const query = req.query.q?.trim();
+
+        if (!query) {
+            return res.status(400).json({
+                success: false,
+                message: "Query is required",
+            });
+        }
+
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+        const skip = (page - 1) * limit;
+
+        const filter = {
+            $or: [
+                { title: { $regex: query, $options: "i" } },
+                { content: { $regex: query, $options: "i" } },
+            ],
+        };
+
+        const news = await News.find(filter)
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit);
+
+        const total = await News.countDocuments(filter);
+
+        return res.json({
+            success: true,
+            data: {
+                news,
+                totalPages: Math.ceil(total / limit),
+            },
+        });
+    } catch (error) {
+        console.error("❌ Search Error:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to search news",
+        });
+    }
+};
 
 exports.getAllNews = async (req, res) => {
     try {
@@ -10,7 +54,6 @@ exports.getAllNews = async (req, res) => {
 
         const query = {};
         if (category) {
-            // case-insensitive match: category could be 'Technology' or 'technology'
             query.category = { $regex: new RegExp(`^${category}$`, 'i') };
         }
 
@@ -126,5 +169,32 @@ exports.getTrendingNews = async (req, res) => {
     } catch (error) {
         console.error('Error fetching trending news:', error);
         res.status(500).json({ success: false, message: 'Server Error fetching trending news' });
+    }
+};
+exports.incrementNewsView = async (req, res) => {
+    try {
+        const news = await News.findByIdAndUpdate(
+            req.params.id,
+            { $inc: { views: 1 } },
+            { new: true }
+        );
+
+        if (!news) {
+            return res.status(404).json({
+                success: false,
+                message: "News not found",
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            views: news.views,
+        });
+    } catch (error) {
+        console.error("❌ Error incrementing views:", error);
+        res.status(500).json({
+            success: false,
+            message: "Failed to increment views",
+        });
     }
 };

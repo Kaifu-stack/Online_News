@@ -4,11 +4,7 @@ import { authService } from '../Service/authService';
 
 export const AuthContext = createContext(null);
 
-export const useAuth = () => {
-    const context = useContext(AuthContext);
-    if (!context) throw new Error('useAuth must be used within AuthProvider');
-    return context;
-};
+export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -31,30 +27,23 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
     }, []);
 
-    useEffect(() => {
-        const syncUser = () => setUser(getStoredUser());
-        window.addEventListener("storage", syncUser);
-        return () => window.removeEventListener("storage", syncUser);
-    }, []);
-
     const login = async (email, password) => {
         const result = await authService.login(email, password);
-
         if (!result.success) {
             toast.error(result.message);
             return { success: false };
         }
 
-        // Save user & token
+        console.log("🟢 Login successful — saving token");
+
         localStorage.setItem("user", JSON.stringify(result.user));
         localStorage.setItem("token", result.token);
 
         setUser(result.user);
-        toast.success(" Login successful!");
 
+        toast.success("Login successful!");
         return { success: true };
     };
-
 
     const register = async (userData) => {
         const result = await authService.register(userData);
@@ -68,13 +57,11 @@ export const AuthProvider = ({ children }) => {
         return { success: true };
     };
 
-
     const logout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("user");
         setUser(null);
-        toast.info("👋 Logged out successfully");
-        window.dispatchEvent(new Event("storage"));
+        toast.info("Logged out");
     };
 
     return (

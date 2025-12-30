@@ -103,9 +103,6 @@ const UserManagement = () => {
             u.email?.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    // -----------------------------
-    // USER MODAL (updated)
-    // -----------------------------
     const UserModal = ({ user, onClose }) => {
         const [name, setName] = useState(user?.name || "");
         const [email, setEmail] = useState(user?.email || "");
@@ -118,7 +115,6 @@ const UserManagement = () => {
             }
 
             if (user) {
-                // Update user
                 try {
                     const { data } = await api.put(`/users/${user._id}`, { name, email, role });
 
@@ -131,7 +127,6 @@ const UserManagement = () => {
                     toast.error("Failed to update user");
                 }
             } else {
-                // Create user
                 try {
                     const { data } = await api.post(`/users`, { name, email, role });
 

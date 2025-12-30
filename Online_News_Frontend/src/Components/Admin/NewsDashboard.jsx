@@ -9,7 +9,7 @@ import {
     FaTrash,
     FaPlus,
 } from 'react-icons/fa';
-import { newsService } from '../Service/newsService';   // ✅ FIXED IMPORT
+import { newsService } from '../Service/newsService';
 import { format } from 'date-fns';
 import { toast } from 'react-toastify';
 
@@ -39,7 +39,7 @@ const NewsDashboard = () => {
                 setStats({
                     totalNews: response.data.data.total || news.length,
                     totalViews: news.reduce((sum, n) => sum + (n.views || 0), 0),
-                    totalUsers: 150, // Backend required
+                    totalUsers: 150,
                     recentNews: news.slice(0, 5),
                 });
             }

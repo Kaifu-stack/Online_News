@@ -14,32 +14,36 @@ const NewsForm = ({ isEdit = false }) => {
     const [imagePreview, setImagePreview] = useState(null);
     const [uploadingImage, setUploadingImage] = useState(false);
 
-    const categories = ["politics", "business", "technology", "sports", "entertainment", "health"];
+    // 👇 FIX: Categories must match your MongoDB enums
+    const categories = ["Politics", "Business", "Technology", "Sports", "Entertainment", "Health"];
 
     const formik = useFormik({
         initialValues: {
             title: "",
             content: "",
             excerpt: "",
-            category: "technology",
+            category: "Technology",
             image: "",
             tags: "",
-            status: "published",
         },
 
         validationSchema: Yup.object({
-            title: Yup.string().min(10).required(),
-            content: Yup.string().min(50).required(),
-            category: Yup.string().required(),
-            image: Yup.string().nullable(),
+            title: Yup.string().min(10, "Title too short").required("Title is required"),
+            content: Yup.string().min(50, "Content too short").required("Content is required"),
+            category: Yup.string().required("Category is required"),
         }),
 
         onSubmit: async (values) => {
+            console.log("🟦 SUBMIT VALUES:", values);
+
             setLoading(true);
 
             const sendData = {
                 ...values,
-                tags: values.tags.split(",").map((t) => t.trim()).filter(Boolean),
+                tags: values.tags
+                    .split(",")
+                    .map((t) => t.trim())
+                    .filter((t) => t.length > 0),
             };
 
             const result = isEdit
@@ -49,10 +53,10 @@ const NewsForm = ({ isEdit = false }) => {
             setLoading(false);
 
             if (result.success) {
-                toast.success("Saved successfully");
+                toast.success(isEdit ? "Updated successfully" : "Published successfully");
                 navigate("/admin/news");
             } else {
-                toast.error("Failed to save news");
+                toast.error(result.message || "Failed to save news");
             }
         },
     });
@@ -72,10 +76,9 @@ const NewsForm = ({ isEdit = false }) => {
                 title: news.title || "",
                 content: news.content || "",
                 excerpt: news.excerpt || "",
-                category: news.category || "technology",
+                category: news.category || "Technology",
                 image: news.image || "",
                 tags: news.tags ? news.tags.join(", ") : "",
-                status: news.status || "published",
             });
 
             setImagePreview(news.image);
@@ -88,17 +91,14 @@ const NewsForm = ({ isEdit = false }) => {
         if (!file) return;
 
         setUploadingImage(true);
-
         const upload = await newsService.uploadImage(file);
-
         setUploadingImage(false);
 
         if (upload.success) {
-            const url = upload.data.url;
-            formik.setFieldValue("image", url);
-            setImagePreview(url);
+            formik.setFieldValue("image", upload.data.url);
+            setImagePreview(upload.data.url);
         } else {
-            toast.error("Upload failed");
+            toast.error("Image upload failed");
         }
     };
 
@@ -120,6 +120,9 @@ const NewsForm = ({ isEdit = false }) => {
                             className="input-field"
                             placeholder="Enter title"
                         />
+                        {formik.touched.title && formik.errors.title && (
+                            <p className="text-red-500 text-sm">{formik.errors.title}</p>
+                        )}
                     </div>
 
                     {/* CATEGORY */}
@@ -188,6 +191,9 @@ const NewsForm = ({ isEdit = false }) => {
                             className="input-field"
                             rows="10"
                         />
+                        {formik.touched.content && formik.errors.content && (
+                            <p className="text-red-500 text-sm">{formik.errors.content}</p>
+                        )}
                     </div>
 
                     {/* TAGS */}

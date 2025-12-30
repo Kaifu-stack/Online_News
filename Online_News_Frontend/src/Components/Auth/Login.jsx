@@ -9,7 +9,6 @@ import {
     FaEye,
     FaEyeSlash,
 } from "react-icons/fa";
-import { toast } from "react-toastify";
 import { useAuth } from "../Context/AuthContext";
 
 const Login = () => {
@@ -32,29 +31,37 @@ const Login = () => {
                 .min(6, "Password must be at least 6 characters")
                 .required("Password is required"),
         }),
+
         onSubmit: async (values) => {
+            console.log("📤 Form submitted with:", values);
+
             setIsLoading(true);
 
             const result = await login(values.email, values.password);
 
+            console.log("📥 Login result received:", result);
+
             setIsLoading(false);
 
             if (result.success) {
+                console.log("➡ Redirecting to /");
                 navigate("/");
+            } else {
+                console.log("❌ Login failed");
             }
-        }
-        ,
+        },
     });
 
     return (
         <div className="min-h-screen bg-linear-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center py-12 px-4">
             <div className="max-w-md w-full">
-
                 <div className="text-center mb-8">
                     <div className="flex justify-center mb-4">
                         <FaNewspaper className="text-blue-600 text-5xl" />
                     </div>
-                    <h2 className="text-3xl font-extrabold text-gray-800">Welcome Back</h2>
+                    <h2 className="text-3xl font-extrabold text-gray-800">
+                        Welcome Back
+                    </h2>
                     <p className="mt-2 text-gray-500 text-sm">
                         Sign in to continue reading top stories
                     </p>
@@ -74,15 +81,9 @@ const Login = () => {
                                     type="email"
                                     {...formik.getFieldProps("email")}
                                     placeholder="you@example.com"
-                                    className={`w-full pl-10 pr-4 py-3 border-2 rounded-lg ${formik.touched.email && formik.errors.email
-                                        ? "border-red-400"
-                                        : "border-gray-200"
-                                        }`}
+                                    className="w-full pl-10 pr-4 py-3 border-2 rounded-lg border-gray-200"
                                 />
                             </div>
-                            {formik.touched.email && formik.errors.email && (
-                                <p className="text-sm text-red-500">{formik.errors.email}</p>
-                            )}
                         </div>
 
                         {/* Password */}
@@ -96,10 +97,7 @@ const Login = () => {
                                     type={showPassword ? "text" : "password"}
                                     {...formik.getFieldProps("password")}
                                     placeholder="••••••••"
-                                    className={`w-full pl-10 pr-10 py-3 border-2 rounded-lg ${formik.touched.password && formik.errors.password
-                                        ? "border-red-400"
-                                        : "border-gray-200"
-                                        }`}
+                                    className="w-full pl-10 pr-10 py-3 border-2 rounded-lg border-gray-200"
                                 />
                                 <button
                                     type="button"
@@ -109,9 +107,6 @@ const Login = () => {
                                     {showPassword ? <FaEyeSlash /> : <FaEye />}
                                 </button>
                             </div>
-                            {formik.touched.password && formik.errors.password && (
-                                <p className="text-sm text-red-500">{formik.errors.password}</p>
-                            )}
                         </div>
 
                         {/* Submit */}
@@ -119,15 +114,14 @@ const Login = () => {
                             type="submit"
                             disabled={isLoading}
                             className={`w-full py-3 rounded-lg text-white font-semibold ${isLoading
-                                ? "bg-gray-400 cursor-not-allowed"
-                                : "bg-linear-to-r from-blue-600 to-purple-600"
+                                    ? "bg-gray-400 cursor-not-allowed"
+                                    : "bg-linear-to-r from-blue-600 to-purple-600"
                                 }`}
                         >
                             {isLoading ? "Signing In..." : "Sign In"}
                         </button>
                     </form>
 
-                    {/* Divider */}
                     <div className="mt-8 flex items-center">
                         <div className="flex-1 border-t border-gray-200"></div>
                         <span className="px-3 text-gray-500 text-sm">

@@ -17,15 +17,14 @@ export const newsService = {
     // 📰 Fetch paginated news
     getNews: async (page = 1, limit = 10, filters = {}) => {
         try {
-            const response = await axios.get(`${API_URL}`, {
+            const response = await axios.get(API_URL, {
                 params: { page, limit, ...filters },
             });
-
             return { success: true, data: response.data };
         } catch (error) {
             console.error("Error fetching news:", error);
             toast.error("⚠️ Failed to load news");
-            return { success: false, error };
+            return { success: false };
         }
     },
 
@@ -37,16 +36,17 @@ export const newsService = {
         } catch (error) {
             console.error("Error loading news:", error);
             toast.error("❌ Failed to load news details");
-            return { success: false, error };
+            return { success: false };
         }
     },
 
     // 📂 Get news by category
     getNewsByCategory: async (category, page = 1, limit = 10) => {
         try {
-            const response = await axios.get(`${API_URL}/category/${category}`, {
-                params: { page, limit },
-            });
+            const response = await axios.get(
+                `${API_URL}/category/${category}`,
+                { params: { page, limit } }
+            );
 
             return {
                 success: true,
@@ -55,7 +55,7 @@ export const newsService = {
         } catch (error) {
             console.error(`Error fetching ${category} news:`, error);
             toast.error(`❌ Failed to load ${category} news`);
-            return { success: false, error };
+            return { success: false };
         }
     },
 
@@ -73,20 +73,24 @@ export const newsService = {
         } catch (error) {
             console.error("Error fetching trending news:", error);
             toast.error("⚡ Failed to load trending news");
-            return { success: false, error };
+            return { success: false };
         }
     },
 
     // ✍️ Create news
     createNews: async (newsData) => {
         try {
-            const response = await axios.post(API_URL, newsData, getAuthHeaders());
+            const response = await axios.post(
+                API_URL,
+                newsData,
+                getAuthHeaders()
+            );
             toast.success("✅ News created successfully");
             return { success: true, data: response.data };
         } catch (error) {
             console.error("Error creating news:", error);
             toast.error("❌ Failed to create news");
-            return { success: false, error };
+            return { success: false };
         }
     },
 
@@ -98,13 +102,12 @@ export const newsService = {
                 newsData,
                 getAuthHeaders()
             );
-
             toast.success("✅ News updated successfully");
             return { success: true, data: response.data };
         } catch (error) {
             console.error("Error updating news:", error);
             toast.error("❌ Failed to update news");
-            return { success: false, error };
+            return { success: false };
         }
     },
 
@@ -120,35 +123,17 @@ export const newsService = {
         } catch (error) {
             console.error("Error deleting news:", error);
             toast.error("⚠️ Failed to delete news");
-            return { success: false, error };
+            return { success: false };
         }
     },
 
-    // 📤 Upload Image
-    uploadImage: async (imageFile) => {
-        try {
-            const formData = new FormData();
-            formData.append("image", imageFile);
-
-            const response = await axios.post(`${API_URL}/upload`, formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-                ...getAuthHeaders(),
-            });
-
-            return { success: true, data: response.data };
-        } catch (error) {
-            console.error("Image upload error:", error);
-            toast.error("❌ Failed to upload image");
-            return { success: false, error };
-        }
-    },
-
-    // 👁 Increment view count
+    // 👁 Increment view count (FIXED)
     incrementViews: async (id) => {
         try {
-            await axios.post(`${API_URL}/${id}/view`);
+            await axios.post(`${API_URL}/${id}/increment-views`);
             return { success: true };
-        } catch {
+        } catch (error) {
+            console.error("View increment failed:", error);
             return { success: false };
         }
     },

@@ -6,6 +6,7 @@ import AdminSidebar from "../Admin/AdminSidebar";
 import NewsDashboard from "../Admin/NewsDashboard";
 import NewsForm from "../Admin/NewsForm";
 import UserManagement from "../Admin/UserManagement";
+import TrafficChart from "../Admin/TrafficChart";
 
 // Local Page Components (defined in this file)
 const AnalyticsPage = () => {
@@ -36,11 +37,15 @@ const AnalyticsPage = () => {
 
             {/* Traffic Overview */}
             <div className="bg-white rounded-xl shadow-card p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">Traffic Overview</h2>
-                <div className="h-80 flex items-center justify-center bg-gray-50 rounded-lg">
-                    <p className="text-gray-500">Chart visualization would go here</p>
+                <h2 className="text-xl font-bold text-gray-900 mb-4">
+                    Traffic Overview
+                </h2>
+
+                <div className="h-80 bg-gray-50 rounded-lg p-4">
+                    <TrafficChart />
                 </div>
             </div>
+
 
             {/* Top Articles */}
             <div className="bg-white rounded-xl shadow-card p-6">

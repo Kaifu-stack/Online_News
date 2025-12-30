@@ -36,6 +36,19 @@ export const newsService = {
             return { success: false };
         }
     },
+    searchNews: async (query, page = 1, limit = 10) => {
+        try {
+            const res = await api.get(`/api/news/search`, {
+                params: { q: query, page, limit },
+            });
+
+            return { success: true, data: res.data.data };
+        } catch (error) {
+            console.error("❌ Search error:", error);
+            return { success: false };
+        }
+    },
+
 
     getNewsById: async (id) => {
         try {

@@ -20,7 +20,7 @@ const NewsCard = ({ news }) => {
         <Link to={`/news/${news._id}`}>
             <div className="card overflow-hidden hover:-translate-y-1 transition-transform duration-300">
                 {/* Image */}
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative h-79 overflow-hidden">
                     <img
                         src={news.image || 'https://via.placeholder.com/400x300?text=News+Image'}
                         alt={news.title}

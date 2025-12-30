@@ -1,28 +1,31 @@
-// routes/newsRoutes.js
-const express = require('express');
-const { protect } = require('../middleware/authMiddleware');
+const express = require("express");
+const router = express.Router();
+
 const {
     getAllNews,
+    getTrendingNews,
+    getNewsByCategory,
     getNewsById,
     createNews,
     updateNews,
     deleteNews,
-    getTrendingNews,
-    getNewsByCategory,
-} = require('../controllers/newsController');
+    searchNews,
+    incrementNewsView
+} = require("../controllers/newsController");
 
-const router = express.Router();
+router.get("/search", searchNews);
 
-router.get('/trending', getTrendingNews);
-router.get('/category/:category', getNewsByCategory);
+router.get("/trending", getTrendingNews);
 
-router.route('/')
-    .get(getAllNews)
-    .post(protect, createNews);
+router.get("/category/:category", getNewsByCategory);
 
-router.route('/:id')
-    .get(getNewsById)
-    .put(protect, updateNews)
-    .delete(protect, deleteNews);
+router.get("/", getAllNews);
+router.post("/:id/increment-views", incrementNewsView);
+
+router.get("/:id", getNewsById);
+router.put("/:id", updateNews);
+router.delete("/:id", deleteNews);
+
+router.post("/", createNews);
 
 module.exports = router;
