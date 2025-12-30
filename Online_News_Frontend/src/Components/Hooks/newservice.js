@@ -2,7 +2,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 // ✅ Backend base URL
-const API_URL = "http://localhost:5000/api/news";
+const API_URL = `${import.meta.env.VITE_API_URL}/api/news`;
 
 // ✅ Helper for Authorization
 const getAuthHeaders = () => {
