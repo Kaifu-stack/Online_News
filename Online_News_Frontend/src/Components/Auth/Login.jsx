@@ -65,6 +65,12 @@ const Login = () => {
                     <p className="mt-2 text-gray-500 text-sm">
                         Sign in to continue reading top stories
                     </p>
+                    <p>
+                        <span className="text-xs text-gray-400">
+                            Admin Login Credentials:
+                            admin@newsportal.com, Admin@123
+                        </span>
+                    </p>
                 </div>
 
                 <div className="bg-white rounded-2xl shadow-lg p-8">
@@ -114,8 +120,8 @@ const Login = () => {
                             type="submit"
                             disabled={isLoading}
                             className={`w-full py-3 rounded-lg text-white font-semibold ${isLoading
-                                    ? "bg-gray-400 cursor-not-allowed"
-                                    : "bg-linear-to-r from-blue-600 to-purple-600"
+                                ? "bg-gray-400 cursor-not-allowed"
+                                : "bg-linear-to-r from-blue-600 to-purple-600"
                                 }`}
                         >
                             {isLoading ? "Signing In..." : "Sign In"}

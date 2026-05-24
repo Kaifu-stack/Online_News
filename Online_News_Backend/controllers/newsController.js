@@ -1,4 +1,4 @@
-const News = require("../models/newsModel");  // REQUIRED
+const News = require("../models/newsModel");
 
 exports.searchNews = async (req, res) => {
     try {

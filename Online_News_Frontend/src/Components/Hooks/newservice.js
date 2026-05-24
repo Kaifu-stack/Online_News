@@ -1,10 +1,10 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
-// ✅ Backend base URL
+//  Backend base URL
 const API_URL = `${import.meta.env.VITE_API_URL}/api/news`;
 
-// ✅ Helper for Authorization
+//  Helper for Authorization
 const getAuthHeaders = () => {
     const token = localStorage.getItem("token");
     return token
@@ -14,7 +14,7 @@ const getAuthHeaders = () => {
 
 export const newsService = {
 
-    // 📰 Fetch paginated news
+    //  Fetch paginated news
     getNews: async (page = 1, limit = 10, filters = {}) => {
         try {
             const response = await axios.get(API_URL, {
@@ -28,7 +28,7 @@ export const newsService = {
         }
     },
 
-    // 🔍 Get news by ID
+    //  Get news by ID
     getNewsById: async (id) => {
         try {
             const response = await axios.get(`${API_URL}/${id}`);
@@ -40,7 +40,7 @@ export const newsService = {
         }
     },
 
-    // 📂 Get news by category
+    //  Get news by category
     getNewsByCategory: async (category, page = 1, limit = 10) => {
         try {
             const response = await axios.get(
@@ -59,7 +59,7 @@ export const newsService = {
         }
     },
 
-    // 🔥 Get trending news
+    //  Get trending news
     getTrendingNews: async (limit = 5) => {
         try {
             const response = await axios.get(`${API_URL}/trending`, {
@@ -77,7 +77,7 @@ export const newsService = {
         }
     },
 
-    // ✍️ Create news
+    //  Create news
     createNews: async (newsData) => {
         try {
             const response = await axios.post(
@@ -94,7 +94,7 @@ export const newsService = {
         }
     },
 
-    // ✏️ Update news
+    //  Update news
     updateNews: async (id, newsData) => {
         try {
             const response = await axios.put(
@@ -111,7 +111,7 @@ export const newsService = {
         }
     },
 
-    // 🗑 Delete news
+    // Delete news
     deleteNews: async (id) => {
         try {
             const response = await axios.delete(
@@ -127,7 +127,7 @@ export const newsService = {
         }
     },
 
-    // 👁 Increment view count (FIXED)
+    // Increment view count (FIXED)
     incrementViews: async (id) => {
         try {
             await axios.post(`${API_URL}/${id}/increment-views`);

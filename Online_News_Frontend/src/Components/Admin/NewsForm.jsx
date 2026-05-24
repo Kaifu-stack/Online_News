@@ -14,7 +14,7 @@ const NewsForm = ({ isEdit = false }) => {
     const [imagePreview, setImagePreview] = useState(null);
     const [uploadingImage, setUploadingImage] = useState(false);
 
-    // 👇 FIX: Categories must match your MongoDB enums
+    //  FIX: Categories must match your MongoDB enums
     const categories = ["Politics", "Business", "Technology", "Sports", "Entertainment", "Health"];
 
     const formik = useFormik({

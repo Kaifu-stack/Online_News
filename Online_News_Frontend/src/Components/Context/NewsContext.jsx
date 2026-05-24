@@ -17,7 +17,7 @@ export const NewsProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [totalPages, setTotalPages] = useState(1);
 
-    // ✅ Fetch All News
+    //  Fetch All News
     const fetchNews = async (page = 1, limit = 10, filters = {}) => {
         setLoading(true);
         try {
@@ -38,7 +38,7 @@ export const NewsProvider = ({ children }) => {
         }
     };
 
-    // ✅ Fetch News By Category (FIXED)
+    //  Fetch News By Category (FIXED)
     const fetchNewsByCategory = async (category, page = 1) => {
         setLoading(true);
         try {
@@ -62,7 +62,7 @@ export const NewsProvider = ({ children }) => {
         }
     };
 
-    // ✅ Fetch News By ID
+    //  Fetch News By ID
     const fetchNewsById = async (id) => {
         setLoading(true);
         try {
@@ -75,7 +75,7 @@ export const NewsProvider = ({ children }) => {
         }
     };
 
-    // ✅ Search News (FIXED)
+    //  Search News (FIXED)
     const searchNews = async (query, page = 1) => {
         setLoading(true);
         try {
@@ -93,7 +93,7 @@ export const NewsProvider = ({ children }) => {
     };
 
 
-    // ✅ Create News
+    // Create News
     const createNews = async (newsData) => {
         try {
             const response = await newsService.createNews(newsData);
@@ -109,7 +109,7 @@ export const NewsProvider = ({ children }) => {
         }
     };
 
-    // ✅ Update News
+    //  Update News
     const updateNews = async (id, newsData) => {
         try {
             const response = await newsService.updateNews(id, newsData);
@@ -125,7 +125,7 @@ export const NewsProvider = ({ children }) => {
         }
     };
 
-    // ✅ Delete News
+    // Delete News
     const deleteNews = async (id) => {
         try {
             const response = await newsService.deleteNews(id);
